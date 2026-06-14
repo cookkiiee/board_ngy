@@ -8,46 +8,15 @@ board_dao = BorardDAO()
 
 while True:
 
-    print("=" * 40)
-    print("1.목록  2.등록  3.내용  4.삭제  0.종료")
-    print("=" * 40)
+    print("=" * 46)
+    print("1.조회  2.목록  3.등록  4.내용  5.삭제  0.종료")
+    print("=" * 46)
 
     menu = input("선택 > ")
 
     if menu == "1":
 
-        boards = board_dao.select_all()
-
-        print()
-        print("번호 제목 작성자 작성일")
-        print("-" * 40)
-
-        for board in boards:
-
-            print(
-                board[0],
-                board[1],
-                board[2],
-                board[3]
-            )
-
-    elif menu == "2":
-
-        title = input("제목 : ")
-        content = input("내용 : ")
-        writer = input("작성자 : ")
-
-        board_dao.insert_board(
-            title,
-            content,
-            writer
-        )
-
-        print("등록 완료")
-
-    elif menu == "3":
-
-        num = input("번호 : ")
+        num = input("조회 번호 : ")
 
         board = board_dao.select_one(num)
 
@@ -60,13 +29,73 @@ while True:
             print("작성자 :", board[3])
             print("작성일 :", board[4])
 
+        else:
+
+            print("해당 번호의 글이 없습니다.")
+
+
+    elif menu == "2":
+
+        boards = board_dao.select_all()
+
+        print()
+        print(f"{'번호':<6}{'제목':<20}{'작성자':<12}{'작성일'}")
+        print("-" * 60)
+
+        for board in boards:
+
+            print(
+                f"{board[0]:<6}"
+                f"{board[1]:<20}"
+                f"{board[3]:<12}"
+                f"{board[4]}"
+            )
+
+
+    elif menu == "3":
+
+        title = input("제목 : ")
+        content = input("내용 : ")
+        writer = input("작성자 : ")
+
+        board_dao.insert_board(
+            title,
+            content,
+            writer
+        )
+
+
     elif menu == "4":
+
+        num = input("내용 확인 번호 : ")
+
+        board = board_dao.select_one(num)
+
+        if board:
+
+            print()
+            print("제목 :", board[1])
+            print("내용 :", board[2])
+
+        else:
+
+            print("해당 번호의 글이 없습니다.")
+
+
+    elif menu == "5":
 
         num = input("삭제 번호 : ")
 
-        board_dao.delete_board(num)
+        result = board_dao.delete_board(num)
 
-        print("삭제 완료")
+        if result:
+
+            print("삭제 완료")
+
+        else:
+
+            print("해당 번호의 글이 없습니다.")
+
 
     elif menu == "0":
 
